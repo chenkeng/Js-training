@@ -95,5 +95,61 @@ const filterNonUnique = arr => arr.filter(i=>arr.indexOf(i)===arr.lastindexOf(i)
 // filterNonUnique([1,2,2,3,4,4,5]) # [1,3,5]
 ``` 
 
+> flatten 
+*拼合数组(2维)*
+* 使用Array.reduce()获取数组中的所有元素和concat()以拼合他们。
+```js
+const flatten = arr=> arr.reduce((a,v)=>a.concat(v),[]);
+// flatten([1,[2],3,4]) # [1,2,3,4]
+```
 
+> flattenDepth
+*将数组向上拼合到指定深度*
+* 使用递归，递减depth，每层深度为1. 使用Array.reduce()和Array.concat() 来合并元素和数组。基本情况下，对于等于1的depth停止递归。省略第二个元素，depth仅拼合到1的深度(单个拼合)。
+```js
+const flattenDepth=(arr,depth=1)=>
+depth !=1 ? arr.reduce((a,v)=>a.concat(Array.isArray(v)?flattenDepth(v,depth-1):v),[]):arr.reduce((a,v)=>a.concat(v),[]);
+// flattenDepth([1,[2],[[[3],4],5]],2) # [1,2,[3],4,5]
+```
+> groupby
+*根据给定函数对数组元素进行分组。*
+* 使用Array.map()将数组的值映射到函数或属性名。使用Array.reduce()创建一个对象，其中得键是从映射得结果产生的。
+```js
+const groupBy=(arr,func)=>arr.map(typeof func==='function'?func:val=>val[func]).reduce((acc,val,i)=>{acc[val]=(acc[val]||[]).concat(arr[i]);return acc;},{});
 
+// groupBy([6.1,4.2,6.3],Math.floor) # {4:[4.2],6:[6.1,6.3]}
+// groupBy(['one', 'two', 'three'], 'length') -> {3: ['one', 'two'], 5: ['three']}
+```
+> head
+*返回列表的头。*
+* 使用arr[0]可返回传递的数组的第一个元素。
+```js
+const head = arr => arr[0];
+// head([1,2,3]) -> 1
+```
+
+> initial
+*返回除最后一个数组之外的所有元素。 有点类似 pop()*
+* 使用 “arr.slice(0,-1)” 返回数组的最后一个元素。
+```js
+const initial = arr => arr.slice(0, -1);
+// initial([1,2,3]) -> [1,2]
+```
+
+> initializeArrayWithRange
+*初始化包含指定范围内的数字的数组。*
+* 使用Array(end-start)创建所需长度的数组Array.map()以填充区域中所需的值。可以省略start以使用默认值0.
+```js
+const initializeArrayWithRange = (end, start = 0) =>
+Array.from({ length: end - start }).map((v, i) => i + start);
+// initializeArrayWithRange(5) # [0,1,2,3,4]
+// initializeArrayWithRange(10,1)  # [1,2,3,4,5,6,7,8,9] 
+```
+
+> initializeArrayWithValues
+*初始化并填充具有指定值的数组。*
+* 使用Array(n)创建所需长度的数组,fill(v)以填充所需的值。可以省略value以使用默认值0.
+```js
+const initializeArrayWithValues = (n, value = 0) => Array(n).fill(value);
+// initializeArrayWithValues(5, 2) -> [2,2,2,2,2]
+```
