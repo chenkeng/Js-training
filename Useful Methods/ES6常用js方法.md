@@ -153,3 +153,20 @@ Array.from({ length: end - start }).map((v, i) => i + start);
 const initializeArrayWithValues = (n, value = 0) => Array(n).fill(value);
 // initializeArrayWithValues(5, 2) -> [2,2,2,2,2]
 ```
+
+
+> intersection
+*返回两个数组中存在的元素的列表。*
+* 从b创建Set, 然后使用Array.filter()on a只保留b中包含的值.
+```js
+const intersection = (a, b) => { const s = new Set(b); return a.filter(x => s.has(x)); };
+// intersection([1,2,3], [4,3,2]) -> [2,3]
+```
+
+> last
+*返回数组中的最后一个元素。*
+* 使用arr.length – 1可计算给定数组的最后一个元素的索引并返回它。
+```js
+const last = arr => arr[arr.length - 1];
+// last([1,2,3]) -> 3
+```
