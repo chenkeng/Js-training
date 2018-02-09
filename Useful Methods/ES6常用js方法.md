@@ -151,7 +151,7 @@ Array.from({ length: end - start }).map((v, i) => i + start);
 * 使用Array(n)创建所需长度的数组,fill(v)以填充所需的值。可以省略value以使用默认值0.
 ```js
 const initializeArrayWithValues = (n, value = 0) => Array(n).fill(value);
-// initializeArrayWithValues(5, 2) -> [2,2,2,2,2]
+// initializeArrayWithValues(5, 2) # [2,2,2,2,2]
 ```
 
 
@@ -160,7 +160,7 @@ const initializeArrayWithValues = (n, value = 0) => Array(n).fill(value);
 * 从b创建Set, 然后使用Array.filter()on a只保留b中包含的值.
 ```js
 const intersection = (a, b) => { const s = new Set(b); return a.filter(x => s.has(x)); };
-// intersection([1,2,3], [4,3,2]) -> [2,3]
+// intersection([1,2,3], [4,3,2]) # [2,3]
 ```
 
 > last
@@ -168,5 +168,29 @@ const intersection = (a, b) => { const s = new Set(b); return a.filter(x => s.ha
 * 使用arr.length – 1可计算给定数组的最后一个元素的索引并返回它。
 ```js
 const last = arr => arr[arr.length - 1];
-// last([1,2,3]) -> 3
+// last([1,2,3]) # 3
 ```
+
+> mapObject
+*使用函数将数组的值映射到对象,其中键值对由原始值作为键和映射值组成。*
+
+* 使用匿名内部函数范围来声明未定义的内存空间, 使用闭包来存储返回值。使用新的Array可将该数组与函数的映射放在其数据集上, 而逗号运算符返回第二个步骤, 而不需要从一个上下文移动到另一个环境 (由于关闭和操作顺序)。
+```js
+const mapObject = (arr, fn) => 
+(a => (a = [arr, arr.map(fn)], a[0].reduce( (acc,val,ind) => (acc[val] = a[1][ind], acc), {}) )) ( );
+/*
+const squareIt = arr => mapObject(arr, a => a*a)
+squareIt([1,2,3]) // { 1: 1, 2: 4, 3: 9 } */
+```
+
+
+
+
+
+
+
+
+***
+> 未完待续。。。
+
+[参考项目 30-seconds-of-code](https://github.com/Chalarangelo/30-seconds-of-code "30-seconds-of-code")   
