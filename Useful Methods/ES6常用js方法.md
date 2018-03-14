@@ -183,14 +183,165 @@ const squareIt = arr => mapObject(arr, a => a*a)
 squareIt([1,2,3]) // { 1: 1, 2: 4, 3: 9 } */
 ```
 
+> nthElement
+*返回数组的第 n 个元素。*
+
+* 使用Array.slice()可获取包含第 n 个元素的数组。如果索引超出界限, 则返回[]。省略第二个参数n, 以获取数组的第一个元素。
+```js
+const nthElement = (arr, n=0) => (n>0? arr.slice(n,n+1) : arr.slice(n))[0];
+/*
+nthElement(['a','b','c'],1) // 'b'
+nthElement(['a','b','b'],-3) // 'a
+*/
+```
+
+> pick
+*从对象中选取给定键的键值对。*
+
+* 使用Array.reduce()将筛选/选取的key转换回具有相应键值对的对象 (如果在 obj 中存在该键)。
+```js
+const pick = (obj, arr) =>
+arr.reduce((acc, curr) => (curr in obj && (acc[curr] = obj[curr]), acc), {});
+// pick({ 'a': 1, 'b': '2', 'c': 3 }, ['a', 'c']) -> { 'a': 1, 'c': 3 }
+
+```
+
+> sample
+*返回数组中的随机元素。*
+
+* Math.random()生成一个随机数, 与length相乘, 将其舍入到最接近的整数Math.floor()。此方法也适用于字符串。
+```js
+const sample = arr => arr[Math.floor(Math.random() * arr.length)];
+// sample([3, 7, 9, 11]) -> 9
+```
+
+> shuffle
+* 随机数组元素的顺序。* 
+
+* 使用Array.sort()可在比较器中使用Math.random()重新排序元素。
+```js
+const shuffle = arr => arr.sort(() => Math.random() - 0.5);
+// shuffle([1,2,3]) -> [2,3,1]
+```
+
+> pull
+* 对原始数组进行修改, 过滤掉指定的值。*
+
+* 使用Array.filter()和Array.includes()来拉出不需要的值。使用Array.length = 0可将传入的数组中的长度重置为零, 并将其设置为Array.push(), 以便仅使用所提取的值填充它。
+```js
+const pull = (arr, ...args) => {
+let pulled = arr.filter((v, i) => !args.includes(v));
+arr.length = 0; pulled.forEach(v => arr.push(v));
+};
+// let myArray = ['a', 'b', 'c', 'a', 'b', 'c'];
+// pull(myArray, 'a', 'c');
+// console.log(myArray) -> [ 'b', 'b' ]
+```
+
+> remove
+* 从数组中移除给定函数返回false的元素. * 
+
+* 使用Array.filter()查找返回 truthy 值的数组元素和Array.reduce()以使用Array.splice()删除元素。使用三参数 (func value, index, array调用函数).
+```js
+const remove = (arr, func) =>
+Array.isArray(arr) ? arr.filter(func).reduce((acc, val) => {
+arr.splice(arr.indexOf(val), 1); return acc.concat(val);
+}, [])
+: [];
+// remove([1, 2, 3, 4], n => n % 2 == 0) -> [2, 4]
+```
 
 
+> similarity
+*返回两个数组中都含有的元素的数组。*
 
+* 使用filter()可删除不属于values的值, 使用includes()确定.
+```js
+const similarity = (arr, values) => arr.filter(v => values.includes(v));
+// similarity([1,2,3], [1,2,4]) -> [1,2]
 
+```
 
+> symmetricDifference
+*返回两个数组非相同元素组成的数组。*
+
+* 从每个数组创建一个Set, 然后对它们中的每一个都使用Array.filter(), 只保留其他值中不包含的数值。
+```js
+const symmetricDifference = (a, b) => {
+const sA = new Set(a), sB = new Set(b);
+return [...a.filter(x => !sB.has(x)), ...b.filter(x => !sA.has(x))];
+}
+// symmetricDifference([1,2,3], [1,2,4]) -> [3,4]
+
+```
+
+> tail
+*返回数组中的所有元素, 除第一个。*
+
+* 如果数组的length大于1, 则返回arr.slice(1), 否则返回整个数组。
+```js
+const tail = arr => arr.length > 1 ? arr.slice(1) : arr;
+// tail([1,2,3]) -> [2,3]
+// tail([1]) -> [1]
+```
+
+> take
+*返回一个数组, 其中 n 个元素从开始处移除。*
+
+* 使用Array.slice()创建数组的切片, 其中包含从开始处取出的n元素。
+```js
+const take = (arr, n = 1) => arr.slice(0, n);
+// take([1, 2, 3], 5) -> [1, 2, 3]
+// take([1, 2, 3], 0) -> []
+
+```
+
+> takeRight
+*返回一个数组, 其中 n 个元素从末尾移除。*
+
+* 使用Array.slice()创建数组的切片, 其中包含从末尾取出的n元素。
+```js
+const takeRight = (arr, n = 1) => arr.slice(arr.length - n, arr.length);
+// takeRight([1, 2, 3], 2) -> [ 2, 3 ]
+// takeRight([1, 2, 3]) -> [3]
+```
+
+> union
+*返回在两个数组中合并后去除重复元素的数组。*
+
+* 创建一个Set, 其中包含a和b的所有值, 并将其转换为数组。
+```js
+const union = (a, b) => Array.from(new Set([...a, ...b]));
+// union([1,2,3], [4,3,2]) -> [1,2,3,4]
+```
+
+> without
+*过滤掉数组中指定值的元素。*
+
+* 使用Array.filter()创建不包括的数组 (使用!Array.includes()) 所有给定值。
+
+```js
+const without = (arr, ...args) => arr.filter(v => !args.includes(v));
+// without([2, 1, 2, 3], 1, 2) -> [3]
+```
+
+> zip
+*创建基于原始数组中的位置分组的元素数组。* 
+
+* 使用Math.max.apply()获取参数中最长的数组。创建一个以该长度为返回值的数组, 并使用 map 函数创建一个分组元素的数组Array.from()如果参数数组的长度不同, 则在未找到任何值的情况下使用undefined。
+```js
+const zip = (...arrays) => {
+const maxLength = Math.max(...arrays.map(x => x.length));
+return Array.from({length: maxLength}).map((_, i) => {
+return Array.from({length: arrays.length}, (_, k) => arrays[k][i]);
+})
+}
+//zip(['a', 'b'], [1, 2], [true, false]); -> [['a', 1, true], ['b', 2, false]]
+//zip(['a'], [1, 2], [true, false]); -> [['a', 1, true], [undefined, 2, false]]
+```
 
 
 ***
-> 未完待续。。。
+> 翻译仍未完待续。。。
 
 [参考项目 30-seconds-of-code](https://github.com/Chalarangelo/30-seconds-of-code "30-seconds-of-code")   
